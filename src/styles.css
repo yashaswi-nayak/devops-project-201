@@ -1,0 +1,65 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: 'Fira Sans', sans-serif;
+  animation: colorchange 20s infinite;
+  /* animation-name followed by duration in seconds*/
+  /* you could also use milliseconds (ms) or something like 2.5s */
+  -webkit-animation: colorchange 20s infinite;
+  overflow: hidden;
+  /* Chrome and Safari */
+}
+
+footer {
+  position: absolute;
+  background-color: white;
+  bottom: 0px;
+  width: 100%;
+  font-size: 1rem;
+  padding-left: 2%;
+}
+
+@keyframes colorchange {
+  0% {
+    background: rgb(38, 87, 165);
+  }
+
+  25% {
+    background: rgb(38, 165, 118);
+  }
+
+  50% {
+    background: rgb(173, 76, 76);
+  }
+
+  75% {
+    background: rgb(175, 33, 120);
+  }
+
+  100% {
+    background: rgb(38, 87, 165);
+  }
+}
+
+@-webkit-keyframes colorchange {
+
+  /* Safari and Chrome - necessary duplicate */
+  0% {
+    background: rgb(38, 87, 165);
+  }
+
+  25% {
+    background: rgb(38, 165, 118);
+  }
+
+  50% {
+    background: rgb(173, 76, 76);
+  }
+
+  75% {
+    background: rgb(175, 33, 120);
+  }
+
+  100% {
+    background: rgb(38, 87, 165);
+  }
+}
