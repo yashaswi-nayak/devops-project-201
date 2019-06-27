@@ -9,7 +9,6 @@ Following steps are to be implemented in order for the dockerization process of 
   - [Docker Deployment](#Docker-Deployment)
 
 We will be using `Ubuntu 18.04 VM` for the process.
-Follow the steps in order, if you do not want Continuous Deployment and Integration you can skip [step 2](#Jenkins-Installation) and [step 4](#Jenkins-Pipeline-Setup).
 
 ### Docker + Docker Compose Installation
 
@@ -33,9 +32,9 @@ Follow the steps in order, if you do not want Continuous Deployment and Integrat
 
     ```$ sudo systemctl status docker ```
 
-2.  We will use Docker Compose 1.24.1, Fetch it from the repo using the command
+2.  We will use Docker Compose 1.21.2, Fetch it from the repo using the command
 
-    ```$ sudo curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-'uname -s'-'uname -m' -o /usr/local/bin/docker-compose```
+    ```$ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-'uname -s'-'uname -m' -o /usr/local/bin/docker-compose```
 3. Set permission for compose, using following command
     
     ```$ sudo chmod +x /usr/local/bin/docker-compose```
@@ -87,7 +86,31 @@ Once Java is up and running. Run the following process in order for the Jenkins 
     
     ```$ sudo ufw status```
 
+5. Setting up Jenkins
+
+    Open `http://your_server_ip_or_domain:8080` in your browser. You will see the following screen first time
+    
+    ![](unlock-jenkins.png)
+
+    In your VM terminal run the following command
+
+    ```$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword ```
+
+    Copy the password in the browser and rest of the process is straight forward.
+
+    In next screen select `Install suggested plugins`
+
+    Once the installation is done, create a user with password.
+
 ### Angular App Setup
+
+We are following 3 steps in building and managing the angular app.
+
+![](architectue.jpg)
+
+- We have a Github Code repo where our application code is stored
+- We will build the Angular app in Jenkins using Jenkins Pipeline
+- Once the App is built, we will Dockerize it in the VM using 
 
 An angular sample application has been created on Github. You can view the repo [here](https://github.com/YashaswiNayak99/devops-project-201)
 
@@ -99,5 +122,41 @@ We have a Dockerfile. This file allows us to build the docker image and run it i
 ### Jenkins Pipeline Setup
 
 The Jenkins Pipeline is built a custom `Jenkinsfile`. Here we specify the stages and step necessary for building the docker image of our angular app.
+
+1. Plugins Installation
+    
+    Since angular is run by node. we install the necessary plugins in the Jenkins.
+
+    Go to your jenkins url in browser.
+
+    Navigate to the Manage Jenkins > Manage Plugins > Available
+
+    ![](node_js_plugin.png)
+
+    Select `Download now and install after restart`
+
+    Jenkins will be restarted after installation.
+
+    Similarly install the plugins
+    - Github Integration Plugin
+    - Blue Ocean
+
+2. Configurations for Pipeline
+
+    Navigate to Credentials > System > Global credentials (unrestricted) > Add Credentials
+
+    ![](credentials.png) 
+
+    Add you Github Account username and password. This should be the same account using which you have created the repo for Angular App
+
+    Once done, we have only a Node Plugin configuration
+
+    Navigate to Manage Jenkins > Global Tool Configuration. Scroll down to NodeJS. Enter the following settings
+
+    ![](node_config.png)
+
+
+
+
 
 ### Docker Deployment
