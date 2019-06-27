@@ -1,5 +1,8 @@
 pipeline {
     agent any
+
+    tools {nodejs "Node10"}
+
     stages {
         stage('CleanUp') {
             steps {
@@ -8,6 +11,7 @@ pipeline {
         }
         stage('Docker Build') {
             steps{
+                sh "npm install"
                 sh "docker build -t my-angular-app ."
             }
         }
