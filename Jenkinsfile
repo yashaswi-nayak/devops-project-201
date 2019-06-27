@@ -31,7 +31,7 @@ pipeline {
 
        stage('Docker Deploy') {
            steps {
-               sh "docker run -d -p 51008:80 --name angular-app my-angular-app:${env.CURR_VER}"
+               sh "sudo docker run -d -p 51008:80 --name angular-app my-angular-app:${env.CURR_VER}"
            }
        }
     }
