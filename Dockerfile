@@ -1,5 +1,5 @@
 FROM nginx
 
-COPY dist/ /usr/share/nginx/html
+COPY dist/myapp/ /usr/share/nginx/html
 
 EXPOSE 80

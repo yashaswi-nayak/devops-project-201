@@ -11,8 +11,8 @@ pipeline {
         }
         stage('Docker Build') {
             steps{
-                sh "npm install"
-                sh "ng build --prod"
+                // sh "npm install"
+                // sh "ng build --prod"
                 sh "docker build -t my-angular-app ."
             }
         }
