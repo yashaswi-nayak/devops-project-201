@@ -68,6 +68,15 @@ Once Java is up and running. Run the following process in order for the Jenkins 
 
 ### Angular App Setup
 
+An angular sample application has been created on Github. You can view the repo [here](https://github.com/YashaswiNayak99/devops-project-201)
+
+Once cloned you can change the files and push it to the repo. On admin approval the changes will be integrated into the repo.
+
+We have a Dockerfile. This file allows us to build the docker image and run it in the VM.
+
+
 ### Jenkins Pipeline Setup
+
+The Jenkins Pipeline is built a custom `Jenkinsfile`. Here we specify the stages and step necessary for building the docker image of our angular app.
 
 ### Docker Deployment
