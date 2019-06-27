@@ -4,4 +4,4 @@ services:
     build: ./
     container_name: my-angular-app
     ports:
-      - '80:80'
+      - '51008:80'
