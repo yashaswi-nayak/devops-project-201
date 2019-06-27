@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Clean Up') {
             steps {
-                sh "npm cache clean"
+                echo 'Clean Up'
             }
         }
         stage('Angular Build') {
