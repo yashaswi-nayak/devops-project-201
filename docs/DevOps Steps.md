@@ -2,7 +2,7 @@
 Following steps are to be implemented in order for the dockerization process of angular application.
 
 - [Dockerization of Angular App](#Dockerization-of-Angular-App)
-  - [Docker Compose Installation](#Docker-Compose-Installation)
+  - [Docker + Docker Compose Installation](#Docker--Docker-Compose-Installation)
   - [Jenkins Installation](#Jenkins-Installation)
   - [Angular App Setup](#Angular-App-Setup)
   - [Jenkins Pipeline Setup](#Jenkins-Pipeline-Setup)
@@ -11,18 +11,39 @@ Following steps are to be implemented in order for the dockerization process of 
 We will be using `Ubuntu 18.04 VM` for the process.
 Follow the steps in order, if you do not want Continuous Deployment and Integration you can skip [step 2](#Jenkins-Installation) and [step 4](#Jenkins-Pipeline-Setup).
 
-### Docker Compose Installation
-1.  We will use Docker Compose 1.24.1, Fetch it from the repo using the command
+### Docker + Docker Compose Installation
+
+1.  We will install Docker CE, follow the below steps for installing.
+    
+    ```$ sudo apt update```
+
+    ```$ sudo apt install apt-transport-https ca-certificates curl software-properties-common```
+
+    ```$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - ```
+
+    ```$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" ```
+
+    ```$ sudo apt update ```
+
+    ```$ apt-cache policy docker-ce ```
+
+    ```$ sudo apt install docker-ce ```
+
+    Verify the installation by running
+
+    ```$ sudo systemctl status docker ```
+
+2.  We will use Docker Compose 1.24.1, Fetch it from the repo using the command
 
     ```$ sudo curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-'uname -s'-'uname -m' -o /usr/local/bin/docker-compose```
-2. Set permission for compose, using following command
+3. Set permission for compose, using following command
     
     ```$ sudo chmod +x /usr/local/bin/docker-compose```
-3. Verify installation using command
+4. Verify installation using command
    
    ```$ docker-compose --version```
 
-   For detailed reference, visit [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04)
+   For detailed reference, visit [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) for Docker and [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) for Docker Compose
 
 ### Jenkins Installation
 Jenkins requires Java 8 to be installed on the system. Install Java 8 using the following command

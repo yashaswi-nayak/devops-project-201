@@ -4,21 +4,15 @@ pipeline {
     tools {nodejs "Node10"}
 
     stages {
-        stage('CleanUp') {
+        stage('Clean Up') {
             steps {
-                echo 'Clean Up'
+                sh "npm cache clean"
             }
         }
-        stage('Docker Build') {
+        stage('Angular Build') {
             steps{
-                // sh "npm install"
+                sh "npm install"
                 // sh "ng build --prod"
-                sh "docker build -t my-angular-app ."
-            }
-        }
-        stage('Docker Deploy'){
-            steps {
-                sh "docker run -d -p 80:80 --name angular-app my-angular-app:latest"
             }
         }
     }
