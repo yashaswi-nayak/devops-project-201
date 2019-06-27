@@ -1,8 +1,5 @@
-FROM node
+FROM nginx
 
-COPY . /angular
-WORKDIR /angular/
+COPY dist/ /usr/share/nginx/html
 
-RUN ["ng","serve","--prod"]
-
-EXPOSE 4200
+EXPOSE 80
