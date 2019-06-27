@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Clean Up') {
             steps {
-                echo 'Clean Up'
+                sh "docker rm -vf angular-app"
             }
         }
         stage('Angular Build') {
@@ -15,9 +15,10 @@ pipeline {
                 sh "ng build --prod"
             }
         }
-        stage('Docker Compose') {
+        stage('Docker Build-Run') {
             steps{
-                sh "docker-compose up -d"
+                sh "docker build -t my-angular-app ."
+                sh "docker run -d -p 51008:80 --name angular-app my-angular-app:latest"
             }
         }
     }
