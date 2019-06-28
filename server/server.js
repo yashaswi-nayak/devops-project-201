@@ -2,7 +2,7 @@ var express = require('express');
 var api = express();
 var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://bridgeuser:bridge123localhost:51004/quoteDB?authSource=admin';
+var url = 'mongodb://bridgeuser:bridge123@localhost:51004/quoteDB?authSource=admin';
 var str = "";
 var router = express.Router();
 
