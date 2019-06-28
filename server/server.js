@@ -42,7 +42,6 @@ setQuotes = function () {
           return false;
         };
         console.log("Data", res);
-        client.close();
         return true;
       });
     }
@@ -76,7 +75,6 @@ app.get('/apis/quote/:qid', function (req, res) {
       }
       console.log(result)
       res.json(result);
-      client.close();
     });
   });
 });
