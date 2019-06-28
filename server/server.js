@@ -27,13 +27,18 @@ setQuotes = function () {
     }
   ]
   MongoClient.connect(url, function (err, db) {
-    var quotesCollection = db.collection('Quotes');
+    if (err) {
+      console.log('ERROR');
+      console.log(err);
+    } else {
+      var quotesCollection = db.collection('Quotes');
 
-    quotesCollection.insertMany(data, function (err, res) {
-      if (err) throw err;
-      console.log("Data");
-      db.close();
-    });
+      quotesCollection.insertMany(data, function (err, res) {
+        if (err) throw err;
+        console.log("Data");
+        db.close();
+      });
+    }
   });
 
 }
