@@ -1,6 +1,15 @@
 version: '3'
-services: 
-  service:
+services:
+  database:
+    image: mongo
+    ports:
+      - '27017:27017'
+  backend:
+    build: ./server/
+    container_name: express-server
+    ports:
+      - '3000:3000'
+  frontend:
     build: ./
     container_name: my-angular-app
     ports:
