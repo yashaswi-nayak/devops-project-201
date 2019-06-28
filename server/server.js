@@ -1,8 +1,10 @@
 var express = require('express');
-var app = express();
+var api = express();
+var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://database:27017/quoteDB';
 var str = "";
+var router = express.Router();
 
 setQuotes = function () {
   var data = [{
@@ -49,7 +51,8 @@ setQuotes = function () {
 
 }
 
-app.get('/apis/init-connection', function (req, res) {
+
+router.get('/init-connection', function (req, res) {
   console.log('Initalizing DB...');
   let conn = setQuotes();
   res.send({
@@ -57,7 +60,7 @@ app.get('/apis/init-connection', function (req, res) {
   });
 });
 
-app.get('/apis/quote/:qid', function (req, res) {
+router.get('/quote/:qid', function (req, res) {
   console.log(req.params);
   MongoClient.connect(url, function (err, client) {
     if (err) {
@@ -79,6 +82,11 @@ app.get('/apis/quote/:qid', function (req, res) {
   });
 });
 
-var server = app.listen(3000, function () {
+
+api.use('/apis', router);
+
+var httpServer = http.createServer(api);
+
+httpServer.listen(3000, function () {
   console.log('LISTENING ON PORT 3000');
 });
