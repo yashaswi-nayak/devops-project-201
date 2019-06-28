@@ -4,6 +4,5 @@ COPY . /server
 WORKDIR /server
 
 RUN ["npm","install"]
-RUN ["node","server.js"]
-
 EXPOSE 3000
+RUN ["node","server.js"]
