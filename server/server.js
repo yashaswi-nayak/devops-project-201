@@ -13,7 +13,13 @@ var QuoteSchema = mongoose.Schema({
 
 var Quote = mongoose.model('Quote', QuoteSchema, 'Quote');
 
-mongoose.connect(url);
+mongoose.connect(url, function (err, conn) {
+  if (err) {
+    console.error(err);
+  }
+  console.log('Connected ' + url);
+  console.log(conn)
+});
 
 setQuotes = function () {
   var data = [{
