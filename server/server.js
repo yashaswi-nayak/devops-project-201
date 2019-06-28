@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://database/quoteDB';
+var url = 'mongodb://database:27017/quoteDB';
 var str = "";
 
 setQuotes = function () {
