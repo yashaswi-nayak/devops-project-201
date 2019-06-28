@@ -1,10 +1,5 @@
 version: '3'
 services:
-  frontend:
-    build: ./
-    container_name: my-angular-app
-    ports:
-      - '51008:80'
   database:
     image: mongo:latest
     container_name: mongo-db-test
@@ -17,6 +12,11 @@ services:
       - 27017:27017
     command: mongod --smallfiles
     deploy:
+  frontend:
+    build: ./
+    container_name: my-angular-app
+    ports:
+      - '51008:80'
   backend:
     build: ./server/
     container_name: express-server
