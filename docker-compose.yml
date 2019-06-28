@@ -22,5 +22,7 @@ services:
     container_name: express-server
     ports:
       - '3000:3000'
+    links:
+      - database
     command: ["./wait-for-it.sh", "database:27017"]
     
