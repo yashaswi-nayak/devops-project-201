@@ -16,12 +16,11 @@ services:
     ports:
       - 27017:27017
     command: mongod --smallfiles
+    deploy:
   backend:
     build: ./server/
     container_name: express-server
     ports:
       - '3000:3000'
-    links:
-      - database
-    depends_on: 
-      - database
+    command: ["./wait-for-it.sh", "database:27017"]
+    
