@@ -22,6 +22,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     const localthis = this;
     this.showSentence = this.sentences[0];
+    this.appSvc.initConnection().subscribe(data => {
+      console.log('Connection Established...');
+    }, err => {
+      console.log('Connection NOT Established...');
+    });
     const source = timer(1000, 10000);
     const subs = source.subscribe(data => {
       this.loadtext();

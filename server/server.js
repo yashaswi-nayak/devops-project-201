@@ -43,6 +43,11 @@ setQuotes = function () {
 
 }
 
+app.get('/apis/init-connection', function (req, res) {
+  console.log('Initalizing DB...');
+  setQuotes();
+});
+
 app.get('/apis/quote/:id', function (req, res) {
   MongoClient.connect(url, function (err, db) {
     var cursor = db.collection('Quotes').findOne({
@@ -56,7 +61,5 @@ app.get('/apis/quote/:id', function (req, res) {
 });
 
 var server = app.listen(3000, function (req, res) {
-  console.log('Initalizing DB...');
-  setQuotes();
   console.log('LISTENING ON PORT 3000');
 });
