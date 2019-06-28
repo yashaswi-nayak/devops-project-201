@@ -41,7 +41,7 @@ setQuotes = function () {
           console.log(err);
           return false;
         };
-        console.log("Data");
+        console.log("Data", res);
         client.close();
         return true;
       });
@@ -59,11 +59,16 @@ app.get('/apis/init-connection', function (req, res) {
 });
 
 app.get('/apis/quote/:id', function (req, res) {
+  console.log(req.params);
   MongoClient.connect(url, function (err, client) {
     var db = client.db('quoteDB');
     var cursor = db.collection('Quotes').findOne({
       id: req.params.id
     }, function (err, result) {
+      if (err) {
+        console.log('ERROR FETCH');
+        console.log(err);
+      }
       console.log(result)
       res.json(result);
       client.close();
