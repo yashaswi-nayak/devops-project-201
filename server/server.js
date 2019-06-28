@@ -14,7 +14,9 @@ var QuoteSchema = mongoose.Schema({
 var Quote = mongoose.model('Quote', QuoteSchema, 'Quote');
 
 connectMongo = () => {
-  mongoose.connect(url);
+  mongoose.connect(url, {
+    useNewUrlParser: true
+  });
 
   mongoose.connection.on('connected', function () {
     logger.info("Connection to Mongo established successfully");
@@ -25,7 +27,7 @@ connectMongo = () => {
   });
 }
 
-setConnection = new connectMongo();
+setConnection = connectMongo();
 
 
 setQuotes = function () {
