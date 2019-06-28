@@ -53,16 +53,18 @@ setQuotes = function () {
     }
   ]
 
-
-  Quote.save(data, function (err, docs) {
-    if (err) {
-      console.error(err);
-      return false;
-    } else {
-      console.log("Multiple documents inserted to Collection");
-      console.log(docs);
-      return true;
-    }
+  data.forEach(quotedata => {
+    let myQuote = new Quote(quotedata);
+    myQuote.save(data, function (err, docs) {
+      if (err) {
+        console.error(err);
+        return false;
+      } else {
+        console.log("Multiple documents inserted to Collection");
+        console.log(docs);
+        return true;
+      }
+    });
   });
 }
 
