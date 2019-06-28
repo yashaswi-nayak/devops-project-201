@@ -8,6 +8,8 @@ services:
       - '51008:4200'
     links:
       - nodeserver
+    networks: 
+      - backend
 
   nodeserver:
     build: ./server/
@@ -16,6 +18,8 @@ services:
       - '3000:3000'
     links:
       - database
+    networks: 
+      - backend
     
   database:
     image: mongo:latest
@@ -24,3 +28,9 @@ services:
       - ./data/db:/data/db
     ports:
       - 27017:27017
+    networks: 
+      - backend
+  
+networks:
+  backend:
+    driver: "bridge"
