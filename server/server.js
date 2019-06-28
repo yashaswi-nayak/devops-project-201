@@ -37,7 +37,7 @@ setQuotes = function () {
       quotesCollection.insertMany(data, function (err, res) {
         if (err) throw err;
         console.log("Data");
-        db.close();
+        client.close();
       });
     }
   });
@@ -50,13 +50,14 @@ app.get('/apis/init-connection', function (req, res) {
 });
 
 app.get('/apis/quote/:id', function (req, res) {
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, function (err, client) {
+    var db = client.db('quoteDB');
     var cursor = db.collection('Quotes').findOne({
       id: req.params.id
     }, function (err, result) {
       console.log(result)
       res.json(result);
-      db.close();
+      client.close();
     });
   });
 });
