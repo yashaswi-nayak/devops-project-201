@@ -1,18 +1,6 @@
 version: '3'
 services:
 
-  database:
-    image: mongo:latest
-    container_name: mongo-db-test
-    environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
-    volumes:
-      - ./data/db:/data/db
-    ports:
-      - 27017:27017
-    command: mongod --smallfiles
-
   frontend:
     build: ./
     container_name: my-angular-app
@@ -26,5 +14,15 @@ services:
       - '3000:3000'
     links:
       - database
-    command: ["./wait-for-it.sh", "database:27017"]
     
+  database:
+    image: mongo:latest
+    container_name: mongo-db-test
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles
