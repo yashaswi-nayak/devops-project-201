@@ -1,10 +1,17 @@
 var express = require('express');
 var api = express();
 var http = require('http');
-var MongoClient = require('mongodb').MongoClient;
+var mongoose = require('mongoose');
 var url = 'mongodb://database:27017/';
 var str = "";
 var router = express.Router();
+
+var QuoteSchema = mongoose.Schema({
+  qid: Number,
+  statement: String
+});
+
+var Quote = mongoose.model('Quote', QuoteSchema, 'Quote');
 
 setQuotes = function () {
   var data = [{
@@ -28,27 +35,27 @@ setQuotes = function () {
       qid: 5
     }
   ]
-  MongoClient.connect(url, function (err, client) {
-    if (err) {
-      console.log('ERROR');
-      console.log(err);
-      return false;
-    } else {
-      var db = client.db('quoteDB');
-      var quotesCollection = db.collection('Quotes');
 
-      quotesCollection.insertMany(data, function (err, res) {
-        if (err) {
-          console.log('ERROR INSERT');
-          console.log(err);
-          return false;
-        };
-        console.log("Data", res);
+  mongoose.connect(url);
+
+  var db = mongoose.connection;
+
+  db.on('error', console.error.bind(console, 'connection error:'));
+
+  db.once('open', function () {
+    console.log("Connection Successful!");
+
+    Quote.collection.insert(data, function (err, docs) {
+      if (err) {
+        console.error(err);
+        return false;
+      } else {
+        console.log("Multiple documents inserted to Collection");
+        console.log(docs);
         return true;
-      });
-    }
+      }
+    });
   });
-
 }
 
 
@@ -62,14 +69,17 @@ router.get('/init-connection', function (req, res) {
 
 router.get('/quote/:qid', function (req, res) {
   console.log(req.params);
-  MongoClient.connect(url, function (err, client) {
-    if (err) {
-      console.log('ERROR CONNECTION');
-      console.log(err);
-    }
-    var db = client.db('quoteDB');
-    var collection = db.collection('Quotes');
-    var cursor = collection.findOne({
+
+  mongoose.connect(url);
+
+  var db = mongoose.connection;
+
+  db.on('error', console.error.bind(console, 'connection error:'));
+
+  db.once('open', function () {
+    console.log("Connection Successful!");
+
+    Quote.collection.findOne({
       "qid": req.params.qid
     }, function (err, result) {
       if (err) {
@@ -79,7 +89,9 @@ router.get('/quote/:qid', function (req, res) {
       console.log(result)
       res.json(result);
     });
+
   });
+
 });
 
 
