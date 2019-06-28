@@ -30,14 +30,20 @@ setQuotes = function () {
     if (err) {
       console.log('ERROR');
       console.log(err);
+      return false;
     } else {
       var db = client.db('quoteDB');
       var quotesCollection = db.collection('Quotes');
 
       quotesCollection.insertMany(data, function (err, res) {
-        if (err) throw err;
+        if (err) {
+          console.log('ERROR INSERT');
+          console.log(err);
+          return false;
+        };
         console.log("Data");
         client.close();
+        return true;
       });
     }
   });
@@ -46,7 +52,10 @@ setQuotes = function () {
 
 app.get('/apis/init-connection', function (req, res) {
   console.log('Initalizing DB...');
-  setQuotes();
+  let conn = setQuotes();
+  res.send({
+    'connection': conn
+  });
 });
 
 app.get('/apis/quote/:id', function (req, res) {
