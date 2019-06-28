@@ -38,7 +38,7 @@ setQuotes = function () {
 
 }
 
-app.get('/apis/quote/:id').get(function (req, res) {
+app.get('/apis/quote/:id', function (req, res) {
   MongoClient.connect(url, function (err, db) {
     var cursor = db.collection('Quotes').findOne({
       id: req.params.id
