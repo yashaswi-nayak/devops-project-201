@@ -7,23 +7,23 @@ var str = "";
 setQuotes = function () {
   var data = [{
       statement: 'The book is in front of the table.',
-      id: 1
+      qid: 1
     },
     {
       statement: 'The sky was deep dark blue in color.',
-      id: 2
+      qid: 2
     },
     {
       statement: 'A glittering gem is not enough for.',
-      id: 3
+      qid: 3
     },
     {
       statement: 'Do not step on the broken glass',
-      id: 4
+      qid: 4
     },
     {
       statement: 'It was getting dark, and we weren’t there yet.',
-      id: 5
+      qid: 5
     }
   ]
   MongoClient.connect(url, function (err, client) {
@@ -58,12 +58,16 @@ app.get('/apis/init-connection', function (req, res) {
   });
 });
 
-app.get('/apis/quote/:id', function (req, res) {
+app.get('/apis/quote/:qid', function (req, res) {
   console.log(req.params);
   MongoClient.connect(url, function (err, client) {
+    if (err) {
+      console.log('ERROR CONNECTION');
+      console.log(err);
+    }
     var db = client.db('quoteDB');
     var cursor = db.collection('Quotes').findOne({
-      id: req.params.id
+      qid: req.params.qid
     }, function (err, result) {
       if (err) {
         console.log('ERROR FETCH');
