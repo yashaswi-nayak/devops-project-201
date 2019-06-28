@@ -17,10 +17,3 @@ services:
     container_name: my-angular-app
     ports:
       - '51008:80'
-  backend:
-    build: ./server/
-    container_name: express-server
-    ports:
-      - '3000:3000'
-    command: ["./wait-for-it.sh", "database:27017"]
-    
