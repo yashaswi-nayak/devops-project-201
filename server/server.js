@@ -19,11 +19,11 @@ connectMongo = () => {
   });
 
   mongoose.connection.on('connected', function () {
-    logger.info("Connection to Mongo established successfully");
+    console.log("Connection to Mongo established successfully");
   });
 
   mongoose.connection.on('error', function (err) {
-    logger.error('Connection to mongo failed ' + err);
+    console.error('Connection to mongo failed ' + err);
   });
 }
 
