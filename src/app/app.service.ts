@@ -10,12 +10,12 @@ export class AppService {
   constructor(private httpSvc: HttpClient) { }
 
   initConnection(): Observable<any> {
-    const url = 'http://localhost:3000/apis/init-connection';
+    const url = 'http://nodeserver:3000/apis/init-connection';
     return this.httpSvc.get(url);
   }
 
   getQuote(id): Observable<any> {
-    const url = 'http://localhost:3000/apis/quote/' + id;
+    const url = 'http://nodeserver:3000/apis/quote/' + id;
     return this.httpSvc.get(url);
   }
 }
