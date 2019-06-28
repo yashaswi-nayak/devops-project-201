@@ -51,5 +51,7 @@ app.get('/apis/quote/:id', function (req, res) {
 });
 
 var server = app.listen(3000, function (req, res) {
+  comsole.log('Initalizing DB...');
+  setQuotes();
   console.log('LISTENING ON PORT 3000');
 });
