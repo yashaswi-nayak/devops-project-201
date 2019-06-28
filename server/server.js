@@ -2,7 +2,7 @@ var express = require('express');
 var api = express();
 var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://database:27017/quoteDB';
+var url = 'mongodb://localhost:51004/quoteDB';
 var str = "";
 var router = express.Router();
 
