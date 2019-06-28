@@ -26,11 +26,12 @@ setQuotes = function () {
       id: 5
     }
   ]
-  MongoClient.connect(url, function (err, db) {
+  MongoClient.connect(url, function (err, client) {
     if (err) {
       console.log('ERROR');
       console.log(err);
     } else {
+      var db = client.db('quoteDB');
       var quotesCollection = db.collection('Quotes');
 
       quotesCollection.insertMany(data, function (err, res) {
