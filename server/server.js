@@ -66,8 +66,9 @@ app.get('/apis/quote/:qid', function (req, res) {
       console.log(err);
     }
     var db = client.db('quoteDB');
-    var cursor = db.collection('Quotes').findOne({
-      qid: req.params.qid
+    var collection = db.collection('Quotes');
+    var cursor = collection.findOne({
+      "qid": req.params.qid
     }, function (err, result) {
       if (err) {
         console.log('ERROR FETCH');
