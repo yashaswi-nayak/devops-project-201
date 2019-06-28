@@ -2,7 +2,7 @@ var express = require('express');
 var api = express();
 var http = require('http');
 var mongoose = require('mongoose');
-var url = 'mongodb://database:27017/';
+var url = 'mongodb://database:27017/quotesDB';
 var str = "";
 var router = express.Router();
 
@@ -13,13 +13,20 @@ var QuoteSchema = mongoose.Schema({
 
 var Quote = mongoose.model('Quote', QuoteSchema, 'Quote');
 
-mongoose.connect(url, function (err, conn) {
-  if (err) {
-    console.error(err);
-  }
-  console.log('Connected ' + url);
-  console.log(conn)
-});
+connectMongo = () => {
+  mongoose.connect(url);
+
+  mongoose.connection.on('connected', function () {
+    logger.info("Connection to Mongo established successfully");
+  });
+
+  mongoose.connection.on('error', function (err) {
+    logger.error('Connection to mongo failed ' + err);
+  });
+}
+
+setConnection = new connectMongo();
+
 
 setQuotes = function () {
   var data = [{
@@ -44,25 +51,15 @@ setQuotes = function () {
     }
   ]
 
-
-
-  var db = mongoose.connection;
-
-  db.on('error', console.error.bind(console, 'connection error:'));
-
-  db.once('open', function () {
-    console.log("Connection Successful!");
-
-    Quote.collection.insert(data, function (err, docs) {
-      if (err) {
-        console.error(err);
-        return false;
-      } else {
-        console.log("Multiple documents inserted to Collection");
-        console.log(docs);
-        return true;
-      }
-    });
+  Quote.collection.insert(data, function (err, docs) {
+    if (err) {
+      console.error(err);
+      return false;
+    } else {
+      console.log("Multiple documents inserted to Collection");
+      console.log(docs);
+      return true;
+    }
   });
 }
 
@@ -78,24 +75,15 @@ router.get('/init-connection', function (req, res) {
 router.get('/quote/:qid', function (req, res) {
   console.log(req.params);
 
-  var db = mongoose.connection;
-
-  db.on('error', console.error.bind(console, 'connection error:'));
-
-  db.once('open', function () {
-    console.log("Connection Successful!");
-
-    Quote.collection.findOne({
-      "qid": req.params.qid
-    }, function (err, result) {
-      if (err) {
-        console.log('ERROR FETCH');
-        console.log(err);
-      }
-      console.log(result)
-      res.json(result);
-    });
-
+  Quote.collection.findOne({
+    "qid": req.params.qid
+  }, function (err, result) {
+    if (err) {
+      console.log('ERROR FETCH');
+      console.log(err);
+    }
+    console.log(result)
+    res.json(result);
   });
 
 });
