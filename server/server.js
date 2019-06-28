@@ -13,6 +13,8 @@ var QuoteSchema = mongoose.Schema({
 
 var Quote = mongoose.model('Quote', QuoteSchema, 'Quote');
 
+mongoose.connect(url);
+
 setQuotes = function () {
   var data = [{
       statement: 'The book is in front of the table.',
@@ -36,7 +38,7 @@ setQuotes = function () {
     }
   ]
 
-  mongoose.connect(url);
+
 
   var db = mongoose.connection;
 
