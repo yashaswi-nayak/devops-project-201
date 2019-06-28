@@ -53,7 +53,8 @@ setQuotes = function () {
     }
   ]
 
-  Quote.collection.insert(data, function (err, docs) {
+
+  Quote.save(data, function (err, docs) {
     if (err) {
       console.error(err);
       return false;
@@ -76,8 +77,7 @@ router.get('/init-connection', function (req, res) {
 
 router.get('/quote/:qid', function (req, res) {
   console.log(req.params);
-
-  Quote.collection.findOne({
+  Quote.findOne({
     "qid": req.params.qid
   }, function (err, result) {
     if (err) {
