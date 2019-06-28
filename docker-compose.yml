@@ -1,15 +1,15 @@
 version: '3'
 services:
-  database:
-    image: mongo
-    container_name: mongo-db-test
-    ports:
-      - '27017:27017'
   frontend:
     build: ./
     container_name: my-angular-app
     ports:
       - '51008:80'
+  database:
+    image: mongo
+    container_name: mongo-db-test
+    ports:
+      - '27017:27017'
   backend:
     build: ./server/
     container_name: express-server
