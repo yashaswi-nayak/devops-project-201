@@ -72,8 +72,6 @@ router.get('/init-connection', function (req, res) {
 router.get('/quote/:qid', function (req, res) {
   console.log(req.params);
 
-  mongoose.connect(url);
-
   var db = mongoose.connection;
 
   db.on('error', console.error.bind(console, 'connection error:'));
