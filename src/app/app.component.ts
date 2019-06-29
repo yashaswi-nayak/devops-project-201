@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
       console.log('Connection NOT Established...');
       console.log(err);
     });
-    const source = timer(5000, 10000);
+    const source = timer(10000, 10000);
     const subs = source.subscribe(data => {
       this.loadtext();
     });
