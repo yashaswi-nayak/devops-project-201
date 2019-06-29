@@ -11,7 +11,7 @@ services:
 
   nodeserver:
     build: ./server/
-    container_name: server
+    container_name: nodeserver
     expose:
       - 3000
     ports:
