@@ -6,10 +6,8 @@ services:
     container_name: my-angular-app
     ports:
       - '51008:4200'
-    links:
-      - nodeserver
     networks: 
-      - backend
+      - skynet
 
   nodeserver:
     build: ./server/
@@ -19,7 +17,7 @@ services:
     links:
       - database
     networks: 
-      - backend
+      - skynet
     
   database:
     image: mongo:latest
@@ -29,8 +27,7 @@ services:
     ports:
       - 27017:27017
     networks: 
-      - backend
+      - skynet
   
 networks:
-  backend:
-    driver: "bridge"
+  skynet: {}
