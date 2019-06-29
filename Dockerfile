@@ -1,5 +1,7 @@
 FROM node AS builder
 
+LABEL maintainer="Yashaswi Nayak"
+
 COPY package.json package-lock.json ./
 RUN npm i && mkdir /ng-app && mv ./node_modules ./ng-app
 WORKDIR /ng-app

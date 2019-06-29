@@ -1,14 +1,22 @@
-## Dockerization of Angular App
-Following steps are to be implemented in order for the dockerization process of angular application.
+## Dockerization of Angular(MEAN) App
+### Yashaswi Nayak
 
-- [Dockerization of Angular App](#Dockerization-of-Angular-App)
+---
+
+I have done the following given processes for deploying the Dockerized MEAN App.
+
+The source code can be found on [Github Repo](https://github.com/YashaswiNayak99/devops-project-201)
+
+I have deployed the app on server. Visit the site [here](http://www.funwithdevops.tk)
+
+- [Dockerization of Angular(MEAN) App](#Dockerization-of-AngularMEAN-App)
+  - [Yashaswi Nayak](#Yashaswi-Nayak)
   - [Docker + Docker Compose Installation](#Docker--Docker-Compose-Installation)
-  - [Jenkins Installation](#Jenkins-Installation)
-  - [Angular App Setup](#Angular-App-Setup)
-  - [Jenkins Pipeline Setup](#Jenkins-Pipeline-Setup)
-  - [Docker Deployment](#Docker-Deployment)
+  - [Angular(MEAN) App Setup](#AngularMEAN-App-Setup)
+  - [Deployment and Demo](#Deployment-and-Demo)
 
 We will be using `Ubuntu 18.04 VM` for the process.
+___
 
 ### Docker + Docker Compose Installation
 
@@ -44,119 +52,154 @@ We will be using `Ubuntu 18.04 VM` for the process.
 
    For detailed reference, visit [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) for Docker and [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04) for Docker Compose
 
-### Jenkins Installation
-Jenkins requires Java 8 to be installed on the system. Install Java 8 using the following command
-    
-```$ sudo apt install openjdk-8-jdk```
+___
 
-Verify if Java is running
+### Angular(MEAN) App Setup
 
-```$ java -version```
+The MEAN App has frontend(Angular App), backend(Node server) and database(MongoDB) components.
 
-Once Java is up and running. Run the following process in order for the Jenkins to be setup
+We have seperate Dockerfile for Angular and Node components. For MongoDB we use a default image from DockerHub. 
 
-1.  We add the repository key to our system
+![Architectue](DockerBuild.png)
+
+We have a Github Code repo where our application code is stored. You can view the repo [here](https://github.com/YashaswiNayak99/devops-project-201)
+
+1. In Angular Application we build the app and deploy it using Nginx server.
+
+    ```docker
+    FROM node AS builder
+
+    COPY package.json package-lock.json ./
+    RUN npm i && mkdir /ng-app && mv ./node_modules ./ng-app
+    WORKDIR /ng-app
+    COPY . .
+    RUN $(npm bin)/ng build --prod --output-path=dist
+
+
+    FROM nginx
+    COPY --from=builder /ng-app/dist /usr/share/nginx/html
+    COPY nginx.conf /etc/nginx/nginx.conf
+    CMD ["nginx", "-g", "daemon off;"]
+    EXPOSE 80
+    ```
+
+    We have a multi step Dockerfile
+    - Using node image we build the angular app with production settings.
+    - After build we package it and serve it in the nginx server.
+
+2. In our repo we have a `/server` folder where we keep the node server files. 
+    ```docker
+    FROM node
+        
+    COPY . /server
+    WORKDIR /server
+
+    RUN ["npm","install"]
+    EXPOSE 3000
+    CMD ["npm","start"]
+    ```
+    Dockerizing the node server is a straight forward process, as specified in the Dockerfile.
+
+3. We build both the frontend and backend using `docker-compose.yml` file
    
-    ```$ wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -```
+    ```docker-compose
+    version: '3'
+    services:
 
-2. Append the package to `source.list` 
+    frontend:
+        build: ./
+        container_name: my-angular-app
+        image: yashdock90/devops201-frontend
+        ports:
+        - '51008:80'
+        networks: 
+        - skynet
+
+    nodeserver:
+        build: ./server/
+        container_name: nodeserver
+        image: yashdock90/devops201-nodeserver
+        expose:
+        - 3000
+        ports:
+        - '3000:3000'
+        links:
+        - database
+        networks: 
+        - skynet
+      
+    database:
+        image: mongo:latest
+        container_name: mongo-db-test
+        volumes:
+        - ./data/db:/data/db
+        ports:
+        - 27017:27017
+        networks: 
+        - skynet
     
-    ```$ sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'```
-
-3. Update `apt` and instal jenkins
-
-    ```$ sudo apt update```
-
-    ```$ sudo apt install jenkins```
-4. Starting Jenkins and Updating Firewall
+    networks:
+    skynet: {}
+    ```
+    As shown above, we have 3 services 
+    - frontend - This builds the Angular app which will be built from the first Dockerfile
+    - nodeserver - This builds the Node server using the second Dockerfile
+    - database - This will pull the default mongodb image from DockerHub
     
-    Staring Jenkins
+    We also have defined a common network (skynet) which will be created across the services for communication between containers.
+
+    The images will be built and tagged using my DockerHub username (yashdock90)
+___
+
+### Deployment and Demo
+
+Deployment of the code was done in an AWS instance (Ubuntu 18.04)
+
+1. Cloned the code from Github, entered the directory.
+2. Ran the following command for building the images
+
+    ```$ sudo docker-compose build frontend```
+
+    ```$ sudo docker-compose build nodeserver```
+
+![Build Frontend](docker-build-frontend.png)
+
+![Build Server](docker-build-nodeserver.png)
+
+3. Once the images are built. We start the services using the command
+
+    ```$ sudo docker-compose up -d```
+
+![Start Compose](docker-up.png)
+
+4. We can check the networks created by using command
     
-    ```$ sudo systemctl start jenkins```
-    
-    Verifying if jenkins is running
-    
-    ```$ sudo systemctl start jenkins```
-    
-    Allowing the traffic through port `8080`
-    
-    ```$ sudo ufw allow 8080```
-    
-    Checking the port status
-    
-    ```$ sudo ufw status```
+    ```$ docker network list```
 
-5. Setting up Jenkins
+5. We can verify the whether containers are on same network, using the command
 
-    Open `http://your_server_ip_or_domain:8080` in your browser. You will see the following screen first time
-    
-    ![](unlock-jenkins.png)
+    ```$ docker network inspect <network-name>```
 
-    In your VM terminal run the following command
+![Inspect Network](docker-inspect.png)
 
-    ```$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword ```
+6. To push the images to DockerHub, we have to login using the DockerHub account.
 
-    Copy the password in the browser and rest of the process is straight forward.
+    ```$ docker login```
 
-    In next screen select `Install suggested plugins`
+![Docker Login](docker-login.png)
 
-    Once the installation is done, create a user with password.
+7. To push the images to DockerHub account, use the command
+   
+    ```$ docker-compose push ```
 
-### Angular App Setup
+![Push to Hub](docker-push.png)
 
-We are following 3 steps in building and managing the angular app.
+You can check the images on DockerHub [frontend-image](https://cloud.docker.com/repository/docker/yashdock90/devops201-frontend) and [server-image](https://cloud.docker.com/repository/docker/yashdock90/devops201-nodeserver)
 
-![](architectue.jpg)
+8. Finally we check the website, Navigate on browser to url http://www.funwithdevops.tk 
 
-- We have a Github Code repo where our application code is stored
-- We will build the Angular app in Jenkins using Jenkins Pipeline
-- Once the App is built, we will Dockerize it in the VM using 
+![Website](website.png)
 
-An angular sample application has been created on Github. You can view the repo [here](https://github.com/YashaswiNayak99/devops-project-201)
+`Note: I had purchased the AWS Instance and the domain name for personal work, using the same host the devops 201 course work. Hence I have modified the nginx server routing accordingly. If the code has to be deployed on other servers the code in nginx.conf has to changed.`
 
-Once cloned you can change the files and push it to the repo. On admin approval the changes will be integrated into the repo.
-
-We have a Dockerfile. This file allows us to build the docker image and run it in the VM.
-
-
-### Jenkins Pipeline Setup
-
-The Jenkins Pipeline is built a custom `Jenkinsfile`. Here we specify the stages and step necessary for building the docker image of our angular app.
-
-1. Plugins Installation
-    
-    Since angular is run by node. we install the necessary plugins in the Jenkins.
-
-    Go to your jenkins url in browser.
-
-    Navigate to the Manage Jenkins > Manage Plugins > Available
-
-    ![](node_js_plugin.png)
-
-    Select `Download now and install after restart`
-
-    Jenkins will be restarted after installation.
-
-    Similarly install the plugins
-    - Github Integration Plugin
-    - Blue Ocean
-
-2. Configurations for Pipeline
-
-    Navigate to Credentials > System > Global credentials (unrestricted) > Add Credentials
-
-    ![](credentials.png) 
-
-    Add you Github Account username and password. This should be the same account using which you have created the repo for Angular App
-
-    Once done, we have only a Node Plugin configuration
-
-    Navigate to Manage Jenkins > Global Tool Configuration. Scroll down to NodeJS. Enter the following settings
-
-    ![](node_config.png)
-
-
-
-
-
-### Docker Deployment
+---

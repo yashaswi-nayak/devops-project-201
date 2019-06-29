@@ -6,7 +6,7 @@ services:
     container_name: my-angular-app
     image: yashdock90/devops201-frontend
     ports:
-      - '51008:80'
+      - '80:80'
     networks: 
       - skynet
 
