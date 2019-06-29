@@ -1,5 +1,5 @@
 ## Dockerization of Angular(MEAN) App
-### Yashaswi Nayak
+Yashaswi Nayak
 
 ---
 
@@ -10,7 +10,6 @@ The source code can be found on [Github Repo](https://github.com/YashaswiNayak99
 I have deployed the app on server. Visit the site [here](http://www.funwithdevops.tk)
 
 - [Dockerization of Angular(MEAN) App](#Dockerization-of-AngularMEAN-App)
-  - [Yashaswi Nayak](#Yashaswi-Nayak)
   - [Docker + Docker Compose Installation](#Docker--Docker-Compose-Installation)
   - [Angular(MEAN) App Setup](#AngularMEAN-App-Setup)
   - [Deployment and Demo](#Deployment-and-Demo)
