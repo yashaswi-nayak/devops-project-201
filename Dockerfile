@@ -1,11 +1,13 @@
-FROM node
+FROM node AS builder
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app
 RUN npm install
 COPY . /usr/src/app
-EXPOSE 4200
-CMD ["npm","start"]
+RUN ["ng","build","--prod"]
 
-# COPY dist/myapp/ /usr/share/nginx/html
+FROM nginx
+COPY --from=builder dist/myapp/ /usr/share/nginx/html
+COPY --from=builder nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80

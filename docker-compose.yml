@@ -5,9 +5,12 @@ services:
     build: ./
     container_name: my-angular-app
     ports:
-      - '51008:4200'
+      - '51008:80'
     networks: 
       - skynet
+  
+  frontend-proxy:
+    image: nginx
 
   nodeserver:
     build: ./server/
