@@ -4,6 +4,7 @@ services:
   frontend:
     build: ./
     container_name: my-angular-app
+    image: yashdock90/devops201-frontend
     ports:
       - '51008:80'
     networks: 
@@ -12,6 +13,7 @@ services:
   nodeserver:
     build: ./server/
     container_name: nodeserver
+    image: yashdock90/devops201-nodeserver
     expose:
       - 3000
     ports:
