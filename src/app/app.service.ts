@@ -10,12 +10,12 @@ export class AppService {
   constructor(private httpSvc: HttpClient) { }
 
   initConnection(): Observable<any> {
-    const url = 'http://www.funwithdevops.tk/apis/init-connection';
+    const url = 'http://localhost/apis/init-connection';
     return this.httpSvc.get(url);
   }
 
   getQuote(id): Observable<any> {
-    const url = 'http://www.funwithdevops.tk/apis/quote/' + id;
+    const url = 'http://localhost/apis/quote/' + id;
     return this.httpSvc.get(url);
   }
 }
