@@ -1,12 +1,14 @@
 FROM node AS builder
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app
-RUN ["npm","install", "&&", "ng","build","--prod"]
-COPY . /usr/src/app
+COPY package.json package-lock.json ./
+RUN npm i && mkdir /ng-app && mv ./node_modules ./ng-app
+WORKDIR /ng-app
+COPY . .
+RUN $(npm bin)/ng build --prod --output-path=dist
+
 
 FROM nginx
-COPY --from=builder /usr/src/app/dist/myapp/ /usr/share/nginx/html
-COPY --from=builder /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /ng-app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+CMD ["nginx", "-g", "daemon off;"]
 EXPOSE 80
