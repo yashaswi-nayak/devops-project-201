@@ -8,9 +8,6 @@ services:
       - '51008:80'
     networks: 
       - skynet
-  
-  frontend-proxy:
-    image: nginx
 
   nodeserver:
     build: ./server/
