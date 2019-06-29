@@ -3,7 +3,7 @@ FROM node AS builder
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app
-RUN ["npm" "install", "&&", "ng","build","--prod"]
+RUN ["npm","install", "&&", "ng","build","--prod"]
 COPY . /usr/src/app
 
 FROM nginx
